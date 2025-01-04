@@ -1,0 +1,38 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #2e2e2e;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-info p {
+  margin: 0 14px;
+}
+
+.logout-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 0px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+  margin-right: 2%;
+}
+
+.logout-button:hover {
+  background-color: #e60000;
+}
+
