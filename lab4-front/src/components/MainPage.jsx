@@ -3,6 +3,7 @@ import Canvas from './Canvas.jsx';
 import { IconButton, TextField, Button } from '@mui/material';
 import './pages.css';
 
+
 const MainPage = () => {
   const [x, setX] = useState(0);
   const [y, setY] = useState('');
@@ -11,12 +12,13 @@ const MainPage = () => {
 
 
 
-  const handleSubmut = () => {
+  const handleSubmit = () => {
     if (y && r) {
       alert(`Отправлено: X=${x}, Y=${y}, R=${r}`);
     } else {
       alert('Заполните все поля');
-    }};
+    }
+  };
 
   const handleXChange = (value) => {
     setX(value);
@@ -60,6 +62,7 @@ const MainPage = () => {
             onChange={handleYChange}
             error={!!error}
             helperText={error}
+
           />
         </div>
         <div className="input-group">
@@ -73,7 +76,7 @@ const MainPage = () => {
               {value}
             </IconButton>
           ))}
-          <Button onClick={handleSubmit}>Отправить</Button>
+          <Button variant="contained" color="primary" onClick={handleSubmit}>Отправить</Button>
         </div>
       </div>
     </div>

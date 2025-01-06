@@ -41,3 +41,7 @@
     align-items: center;
     gap: 10px;
   }
+
+.input-group span {
+    color: #ffffff;
+  }
