@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.*;
 import ru.ifmo.se.web4lab.database.UserDAO;
 import ru.ifmo.se.web4lab.models.User;
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import ru.ifmo.se.web4lab.utils.TokenUtil;
 
 import java.util.Optional;
 
@@ -52,8 +53,11 @@ public class UserController {
         Optional<User> optionalUser = userDAO.findByUsername(username);
 
         if (optionalUser.isPresent() && checkPassword(password, optionalUser.get().getHashed_password())) {
-            String token = generateToken(username);
-            return Response.ok().entity("Login successful. Token: " + token).build();
+            // Генерация JWT токена
+            String token = TokenUtil.generateToken(username);
+            return Response.ok()
+                    .header("Authorization", "Bearer " + token)  // Отправляем токен в заголовке
+                    .build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("Invalid username or password.")
