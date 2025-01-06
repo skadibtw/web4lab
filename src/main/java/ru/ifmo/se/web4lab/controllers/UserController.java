@@ -49,7 +49,7 @@ public class UserController {
     @POST
     @Path("/login")
     @PermitAll
-    public Response login(@FormParam("username") String username, @FormParam("password") String password) {
+    public Response login(String username, String password) {
         Optional<User> optionalUser = userDAO.findByUsername(username);
 
         if (optionalUser.isPresent() && checkPassword(password, optionalUser.get().getHashed_password())) {

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './pages.css'
 
 const LoginPage = () => {
@@ -7,15 +9,31 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (username && password) {
-      // Dummy API call simulation
-      alert('Логин успешно выполнен');
-      navigate('/main');
+      const response = await fetch('http://localhost:8080/web4lab-1.0-SNAPSHOT/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: username,
+          hashed_password: password
+        })
+      }); 
+      if (response.status === 200) {
+        console.log('User logged in successfully');
+        toast.success('Пользователь вошел в систему');
+        navigate('/main');
+      } else {
+        console.log('Error logging in');
+        toast.error('Ошибка входа');
+      }     
     } else {
       alert('Введите логин и пароль');
     }
   };
+
   const handleRegister = () => {
     navigate('/register');
   }
