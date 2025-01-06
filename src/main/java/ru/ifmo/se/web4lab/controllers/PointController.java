@@ -21,7 +21,8 @@ public class PointController {
     @RolesAllowed({"USER", "ADMIN"}) // Ограничение по ролям
     public Response createPoint(Point point) {
         String currentUsername = securityContext.getUserPrincipal().getName(); // Получаем имя пользователя
+        point.calc();
         pointDAO.savePoint(point, currentUsername); // Сохраняем точку с автором
-        return Response.status(Response.Status.CREATED).build();
+        return Response.ok(point).build();
     }
 }

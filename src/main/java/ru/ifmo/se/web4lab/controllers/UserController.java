@@ -69,11 +69,6 @@ public class UserController {
         return BCrypt.verifyer().verify(inputPassword.toCharArray(), storedHash).verified;
     }
 
-    private String generateToken(String username) {
-        // Здесь можно использовать библиотеку JWT для генерации токена
-        return "dummy-token-for-" + username; // Пример, замените на реальную генерацию токена
-    }
-
     private String hashPassword(String password) {
         return BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }

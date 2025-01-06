@@ -25,4 +25,10 @@ public class UserDAO {
                 .getResultStream()
                 .findFirst();
     }
+
+    // Валидация пользователя
+    public boolean validateUser(String username, String hashedPassword) {
+        Optional<User> userOpt = findByUsername(username);
+        return userOpt.isPresent() && userOpt.get().getHashed_password().equals(hashedPassword);
+    }
 }
