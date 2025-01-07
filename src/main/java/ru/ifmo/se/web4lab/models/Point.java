@@ -24,8 +24,8 @@ public class Point implements Serializable {
     private Date timestamp;
     @Column(nullable = false)
     private long executionTime;
-    @Column(name = "created_by", nullable = true)
-    private String createdBy; // Имя пользователя, создавшего точку
+    @Column(name = "created_by", nullable = false)
+    private String createdBy; // Токен пользователя, создавшего точку
 
 
     public Point() {

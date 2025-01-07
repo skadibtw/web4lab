@@ -3,6 +3,7 @@ import Header from './Header';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 
 function RegisterPage() {
@@ -24,11 +25,18 @@ function RegisterPage() {
 
     if (response.status === 201) {
       console.log('User registered successfully');
+      console.log('response: ', response);
+      const token = response.headers.get('Authorization'); // Получаем токен из заголовка
+      console.log(token);
+      Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'Strict' });
       toast.success('Пользователь зарегистрирован');
       navigate('/main');
     } else if (response.status === 409) {
       console.log('User already exists');
       toast.error('Пользователь с таким логином уже существует');
+    } else if (response.status === 404) {
+      console.log('URL not found');
+      toast.error('URL не найден');
     } else {
       console.log('Error registering user');
       toast.error('Ошибка регистрации');
@@ -38,6 +46,7 @@ function RegisterPage() {
   return (
     <div className="register-page">
       <Header />
+      <ToastContainer />
       <h2>Регистрация</h2>
       <div className="form">
         <input

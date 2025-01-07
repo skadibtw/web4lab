@@ -19,7 +19,12 @@ public class PointController {
     @POST
     @Path("/create")
     @RolesAllowed({"USER", "ADMIN"}) // Ограничение по ролям
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON) // Указываем, что ответ будет в формате JSON
     public Response createPoint(Point point) {
+        if (securityContext.getUserPrincipal() == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("User not authenticated").build();
+        }
         String currentUsername = securityContext.getUserPrincipal().getName(); // Получаем имя пользователя
         point.calc();
         pointDAO.savePoint(point, currentUsername); // Сохраняем точку с автором

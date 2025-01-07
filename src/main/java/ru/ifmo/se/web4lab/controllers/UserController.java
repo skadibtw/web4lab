@@ -25,16 +25,42 @@ public class UserController {
 
     @POST
     @Path("/register")
+    @PermitAll
     public Response register(User user) {
-        if (userDAO.findByUsername(user.getUsername()).isPresent()) {
-            return Response.status(Response.Status.CONFLICT)
-                    .entity("User already exists.")
+        try {
+            // Валидация данных пользователя
+            if (user.getUsername() == null || user.getUsername().isEmpty() || user.getHashed_password() == null || user.getHashed_password().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Username and password must not be empty.")
+                        .build();
+            }
+    
+            // Проверка существующего пользователя
+            if (userDAO.findByUsername(user.getUsername()).isPresent()) {
+                return Response.status(Response.Status.CONFLICT)
+                        .entity("User already exists.")
+                        .build();
+            }
+    
+            // Хеширование пароля
+            String hashedPassword = hashPassword(user.getHashed_password());
+            user.setHashed_password(hashedPassword);
+            String token = TokenUtil.generateToken(user.getUsername());
+    
+            // Создание нового пользователя
+            userDAO.createUser(user);
+    
+            // Возвращение успешного ответа
+            System.out.println("Bearer " + token);
+            return Response.status(Response.Status.CREATED)
+            .header("Authorization", "Bearer " + token)
+            .build();
+            } catch (Exception e) {
+            // Обработка исключений
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("An error occurred while registering the user.")
                     .build();
         }
-        String hashedPassword = hashPassword(user.getHashed_password());
-        user.setHashed_password(hashedPassword);
-        userDAO.createUser(user);
-        return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
@@ -46,15 +72,19 @@ public class UserController {
                 .map(user -> Response.ok(user).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
+
     @POST
     @Path("/login")
     @PermitAll
-    public Response login(String username, String password) {
+    public Response login(User user) {
+        String username = user.getUsername();
+        String password = user.getHashed_password();
         Optional<User> optionalUser = userDAO.findByUsername(username);
 
         if (optionalUser.isPresent() && checkPassword(password, optionalUser.get().getHashed_password())) {
             // Генерация JWT токена
             String token = TokenUtil.generateToken(username);
+            System.out.println("Bearer " + token);
             return Response.ok()
                     .header("Authorization", "Bearer " + token)  // Отправляем токен в заголовке
                     .build();

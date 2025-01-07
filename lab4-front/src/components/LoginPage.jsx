@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './pages.css'
+import Cookies from 'js-cookie';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -22,6 +23,10 @@ const LoginPage = () => {
         })
       }); 
       if (response.status === 200) {
+        const token = response.headers.get('Authorization').split(' ')[1]; // Получаем токен из заголовка
+        if (token) {
+          Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'Strict' });
+        }
         console.log('User logged in successfully');
         toast.success('Пользователь вошел в систему');
         navigate('/main');
@@ -40,6 +45,7 @@ const LoginPage = () => {
   return (
     
     <div className="login-page">
+      <ToastContainer />
       <h2>Вход</h2>
       
       <div className="form">

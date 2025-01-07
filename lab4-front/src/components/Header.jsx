@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './header.css';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function Header() {
-    const onLogout = () => {
-        console.log("логаут");
-    }
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = Cookies.get('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const onLogout = () => {
+    Cookies.remove('token');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
+    const token = Cookies.get('token');
 
 return (
   <header className="header">
@@ -14,9 +26,11 @@ return (
         <p><strong>Группа:</strong> P3217</p>
         <p><strong>Вариант:</strong> 4477</p>
       </div>
-        <button className="logout-button" onClick={onLogout}>
-          Выход
-        </button>
+      {isLoggedIn && (
+          <button className="logout-button" onClick={onLogout}>
+            Выход
+          </button>
+        )}
     </div>
   </header>
 )

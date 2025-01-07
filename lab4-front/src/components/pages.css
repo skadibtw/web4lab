@@ -1,9 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 .login-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30%;
+    margin-top: 10%;
     flex-direction: column; 
+    overflow: hidden;
   }
   .login-page h2 {
     font-size: 2em;
@@ -28,6 +34,8 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    min-height: 100vh;
+    overflow: hidden;
   }
   
   .input-container {
@@ -45,3 +53,41 @@
 .input-group span {
     color: #ffffff;
   }
+
+.register-page {
+  margin-top: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .login-page,
+  .main-page,
+  .register-page {
+    margin-top: 10%;
+    padding: 0 2em;
+  }
+  .form {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page,
+  .main-page,
+  .register-page {
+    margin-top: 5%;
+    padding: 0 1em;
+  }
+  .form,
+  .input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .form input {
+    width: 100%;
+  }
+}

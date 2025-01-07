@@ -21,4 +21,11 @@ public class TokenUtil {
         DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(token);  // Проверка токена
         return decodedJWT.getSubject();  // Извлекаем subject (имя пользователя)
     }
+    public static String validateToken(String token) {
+        try {
+            return getUsernameFromToken(token);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

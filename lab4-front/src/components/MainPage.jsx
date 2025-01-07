@@ -1,22 +1,46 @@
 import React, { useState } from 'react';
 import Canvas from './Canvas.jsx';
 import { IconButton, TextField, Button } from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './pages.css';
+import Cookies from 'js-cookie';
 
 
 const MainPage = () => {
   const [x, setX] = useState(0);
-  const [y, setY] = useState('');
+  const [y, setY] = useState(0);
   const [r, setR] = useState(3);
   const [error, setError] = useState('');
 
-
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (y && r) {
-      alert(`Отправлено: X=${x}, Y=${y}, R=${r}`);
+      const token = Cookies.get('token');
+      console.log('token: ', token);
+      try {
+        const response = await fetch('http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}` // "Bearer <токен>"
+          },
+          body: JSON.stringify({ x, y, r })
+        });
+        if (response.ok) {
+          toast.success('Точка успешно отправлена');
+
+        }
+        else if (response.status === 401) {
+          toast.error('Необходимо авторизоваться для отправки точки');
+        }
+        else {
+          toast.error('Ошибка при отправке точки');
+        }
+      } catch (e) {
+        toast.error('Сетевая ошибка');
+      }
     } else {
-      alert('Заполните все поля');
+      toast.error('Заполните все поля');
     }
   };
 
@@ -40,6 +64,7 @@ const MainPage = () => {
 
   return (
     <div className="main-page">
+            <ToastContainer />
             <Canvas />
       <div className="input-container">
         <div className="input-group">
