@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './header.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import CustomIconButton from './CustomIconButton';
 
 function Header() {
   const navigate = useNavigate();
@@ -27,10 +28,7 @@ return (
         <p><strong>Вариант:</strong> 4477</p>
       </div>
       {isLoggedIn && (
-          <button className="logout-button" onClick={onLogout}>
-            Выход
-          </button>
-        )}
+          <CustomIconButton icon='Выход' onClick={onLogout}/>        )}
     </div>
   </header>
 )

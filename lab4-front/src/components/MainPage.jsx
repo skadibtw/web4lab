@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import Canvas from './Canvas.jsx';
-import { IconButton, TextField, Button } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './pages.css';
 import Cookies from 'js-cookie';
-
+import CustomInput from './CustomInput.jsx';
+import CustomIconButton from './CustomIconButton.jsx';
+import Canvas from './Canvas.jsx';
 
 const MainPage = () => {
   const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  const [y, setY] = useState('');
   const [r, setR] = useState(3);
   const [error, setError] = useState('');
 
@@ -22,18 +22,15 @@ const MainPage = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${token}` // "Bearer <токен>"
+            'Authorization': `${token}` 
           },
           body: JSON.stringify({ x, y, r })
         });
         if (response.ok) {
           toast.success('Точка успешно отправлена');
-
-        }
-        else if (response.status === 401) {
+        } else if (response.status === 401) {
           toast.error('Необходимо авторизоваться для отправки точки');
-        }
-        else {
+        } else {
           toast.error('Ошибка при отправке точки');
         }
       } catch (e) {
@@ -48,8 +45,7 @@ const MainPage = () => {
     setX(value);
   };
 
-  const handleYChange = (event) => {
-    const value = event.target.value;
+  const handleYChange = (value) => { 
     if (value === '' || (value >= -3 && value <= 5)) {
       setY(value);
       setError('');
@@ -64,44 +60,47 @@ const MainPage = () => {
 
   return (
     <div className="main-page">
-            <ToastContainer />
-            <Canvas />
+      <ToastContainer />
+      <Canvas />
       <div className="input-container">
         <div className="input-group">
           <span>X:</span>
           {[-3, -2, -1, 0, 1, 2, 3, 4, 5].map((value) => (
-            <IconButton
-              key={value}
+            <CustomIconButton
+              key={`x-${value}`} // Добавлено префикс для уникальности
+              icon={value.toString()} // Преобразуем в строку
               color={x === value ? 'primary' : 'default'}
               onClick={() => handleXChange(value)}
-            >
-              {value}
-            </IconButton>
+            />
           ))}
         </div>
         <div className="input-group">
           <span>Y:</span>
-          <TextField
+          <CustomInput
             type="number"
             value={y}
             onChange={handleYChange}
-            error={!!error}
-            helperText={error}
-
+            error={error} // Передаём текст ошибки
+            label="Введите Y"
           />
         </div>
         <div className="input-group">
           <span>R:</span>
           {[-3, -2, -1, 0, 1, 2, 3, 4, 5].map((value) => (
-            <IconButton
-              key={value}
+            <CustomIconButton
+              key={`r-${value}`} // Добавлено префикс для уникальности
+              icon={value.toString()} // Преобразуем в строку
               color={r === value ? 'primary' : 'default'}
               onClick={() => handleRChange(value)}
-            >
-              {value}
-            </IconButton>
+            />
           ))}
-          <Button variant="contained" color="primary" onClick={handleSubmit}>Отправить</Button>
+          <CustomIconButton
+            key="submit-button" // Уникальный ключ
+            icon='keyboard-arrow-up'
+            color='default'
+            onClick={handleSubmit}
+            style={{ marginLeft: '10px' }} // Добавлен отступ
+          />
         </div>
       </div>
     </div>

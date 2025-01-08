@@ -42,6 +42,7 @@ const LoginPage = () => {
   const handleRegister = () => {
     navigate('/register');
   }
+  
   return (
     
     <div className="login-page">
