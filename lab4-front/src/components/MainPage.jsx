@@ -46,7 +46,7 @@ const MainPage = () => {
   };
 
   const handleYChange = (value) => { 
-    if (value === '' || (value >= -3 && value <= 5)) {
+    if ((value >= -3 && value <= 5)) {
       setY(value);
       setError('');
     } else {
@@ -67,7 +67,7 @@ const MainPage = () => {
           <span>X:</span>
           {[-3, -2, -1, 0, 1, 2, 3, 4, 5].map((value) => (
             <CustomIconButton
-              key={`x-${value}`} // Добавлено префикс для уникальности
+              key={`${value}`}
               icon={value.toString()} // Преобразуем в строку
               color={x === value ? 'primary' : 'default'}
               onClick={() => handleXChange(value)}
@@ -88,7 +88,7 @@ const MainPage = () => {
           <span>R:</span>
           {[-3, -2, -1, 0, 1, 2, 3, 4, 5].map((value) => (
             <CustomIconButton
-              key={`r-${value}`} // Добавлено префикс для уникальности
+              key={`${value}`} // Добавлено префикс для уникальности
               icon={value.toString()} // Преобразуем в строку
               color={r === value ? 'primary' : 'default'}
               onClick={() => handleRChange(value)}

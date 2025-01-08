@@ -1,24 +1,17 @@
 import React from 'react';
-import IconButton from 'react-toolbox/lib/button';
-import PropTypes from 'prop-types';
-import 'react-toolbox/lib/button/theme.css'; // Подключение стилей
+import IconButton from '@mui/material/IconButton';
+import Icon from '@mui/material/Icon';
 
 const CustomIconButton = ({ icon, color, onClick, style }) => {
   return (
     <IconButton
-      icon={icon}
-      primary={color === 'primary'}
+      color={color === 'primary' ? 'primary' : 'default'}
       onClick={onClick}
       style={style}
-    />
+    >
+      <Icon>{icon}</Icon>
+    </IconButton>
   );
-};
-
-CustomIconButton.propTypes = {
-  icon: PropTypes.string.isRequired, // Ожидаем строку
-  color: PropTypes.oneOf(['primary', 'default']),
-  onClick: PropTypes.func.isRequired,
-  style: PropTypes.object,
 };
 
 export default CustomIconButton;

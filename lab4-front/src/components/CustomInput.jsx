@@ -1,42 +1,36 @@
-import React from 'react';
-import Input from 'react-toolbox/lib/input';
-import PropTypes from 'prop-types';
-import './CustomInput.css'; // Импортируем стили
+import React from "react";
+import TextField from "@mui/material/TextField";
+import "./CustomInput.css";
 
 const CustomInput = ({
   value,
   onChange,
-  label = 'Name',
-  name = 'name',
+  label = "Name",
+  name = "name",
   maxLength = 16,
-  type = 'text',
+  type = "text",
   error,
 }) => {
+  const handleChange = (event) => {
+    const value = event.target.value;
+    onChange(value);
+  };
+
   return (
-    <Input
+    <TextField
       type={type}
       label={label}
       name={name}
       value={value}
-      onChange={onChange}
-      maxLength={maxLength}
-      error={error} // Передаём текст ошибки через проп 'error'
-      className="custom-input" // Добавляем класс для стилизации
+      onChange={handleChange}
+      inputProps={{
+        maxLength,
+      }}
+      error={Boolean(error)}
+      helperText={error}
+      className="custom-input"
     />
   );
-};
-
-CustomInput.propTypes = {
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-  onChange: PropTypes.func.isRequired,
-  label: PropTypes.string,
-  name: PropTypes.string,
-  maxLength: PropTypes.number,
-  type: PropTypes.string,
-  error: PropTypes.string,
 };
 
 export default CustomInput;
