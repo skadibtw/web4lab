@@ -1,0 +1,11 @@
+.custom-input .input {
+    color: white !important; /* Белый текст внутри поля ввода */
+  }
+  
+  .custom-input .label {
+    color: white !important; /* Белый текст метки */
+  }
+  
+  .custom-input .error {
+    color: #ff0000 !important; /* Красный цвет текста ошибки */
+  }
