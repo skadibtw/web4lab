@@ -1,12 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 
-const Canvas = () => {
+const Canvas = ({ r }) => {
   const canvasRef = useRef(null);
-  const [R, setR] = useState(3);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const Xcanvas = canvas.width;
     const Ycanvas = canvas.height;
 
@@ -16,7 +15,7 @@ const Canvas = () => {
 
     const drawGrid = () => {
       const gridSpacing = Xcanvas / 10;
-      ctx.strokeStyle = '#e0e0e0';
+      ctx.strokeStyle = "#e0e0e0";
       ctx.beginPath();
       for (let x = 0; x <= Xcanvas; x += gridSpacing) {
         ctx.moveTo(x, 0);
@@ -30,7 +29,7 @@ const Canvas = () => {
     };
 
     const drawAxes = () => {
-      ctx.strokeStyle = '#ffffff';
+      ctx.strokeStyle = "#ffffff";
       ctx.beginPath();
       ctx.moveTo(Xcanvas / 2, 0);
       ctx.lineTo(Xcanvas / 2, Ycanvas);
@@ -40,19 +39,19 @@ const Canvas = () => {
     };
 
     const drawShapes = () => {
-      const scale = (Xcanvas / 2) * (R / 5);
-      ctx.fillStyle = '#5f9ea0';
+      const scale = (Xcanvas / 2) * (r / 5);
+      ctx.fillStyle = "#5f9ea0";
 
       // Четверть круга
       ctx.beginPath();
       ctx.moveTo(Xcanvas / 2, Ycanvas / 2);
-      ctx.arc(Xcanvas / 2, Ycanvas / 2, scale / 2, 0, Math.PI);
+      ctx.arc(Xcanvas / 2, Ycanvas / 2, scale / 2, Math.PI, Math.PI / 2);
       ctx.fill();
       ctx.stroke();
 
       // Прямоугольник
       ctx.beginPath();
-      ctx.rect(Xcanvas / 2, Ycanvas / 2, scale / 2, scale);
+      ctx.rect(Xcanvas / 2, Ycanvas / 2, scale, -scale / 2);
       ctx.fill();
       ctx.stroke();
 
@@ -60,30 +59,30 @@ const Canvas = () => {
       ctx.beginPath();
       ctx.moveTo(Xcanvas / 2 - scale, Ycanvas / 2);
       ctx.lineTo(Xcanvas / 2, Ycanvas / 2);
-      ctx.lineTo(Xcanvas / 2, Ycanvas / 2 - scale / 2);
+      ctx.lineTo(Xcanvas / 2, Ycanvas / 2 - scale);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
     };
 
     const drawLabels = () => {
-      const scale = (Xcanvas / 2) * (R / 5);
-      ctx.font = '16px Arial';
-      ctx.fillStyle = '#ffffff';
+      const scale = (Xcanvas / 2) * (r / 5);
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#ffffff";
 
-      ctx.fillText('-R', Xcanvas / 2 - scale, Ycanvas / 2 + 20);
-      ctx.fillText('-R/2', Xcanvas / 2 - scale / 2, Ycanvas / 2 + 20);
-      ctx.fillText('R/2', Xcanvas / 2 + scale / 2, Ycanvas / 2 + 20);
-      ctx.fillText('R', Xcanvas / 2 + scale, Ycanvas / 2 + 20);
+      ctx.fillText("-R", Xcanvas / 2 - scale, Ycanvas / 2 + 20);
+      ctx.fillText("-R/2", Xcanvas / 2 - scale / 2, Ycanvas / 2 + 20);
+      ctx.fillText("R/2", Xcanvas / 2 + scale / 2, Ycanvas / 2 + 20);
+      ctx.fillText("R", Xcanvas / 2 + scale, Ycanvas / 2 + 20);
 
-      ctx.fillText('R', Xcanvas / 2 - 20, Ycanvas / 2 - scale);
-      ctx.fillText('R/2', Xcanvas / 2 - 20, Ycanvas / 2 - scale / 2);
-      ctx.fillText('-R/2', Xcanvas / 2 - 20, Ycanvas / 2 + scale / 2);
-      ctx.fillText('-R', Xcanvas / 2 - 20, Ycanvas / 2 + scale);
+      ctx.fillText("R", Xcanvas / 2 - 20, Ycanvas / 2 - scale);
+      ctx.fillText("R/2", Xcanvas / 2 - 20, Ycanvas / 2 - scale / 2);
+      ctx.fillText("-R/2", Xcanvas / 2 - 20, Ycanvas / 2 + scale / 2);
+      ctx.fillText("-R", Xcanvas / 2 - 20, Ycanvas / 2 + scale);
     };
 
     const drawGraph = () => {
-      if (R === null) return;
+      if (r === null) return;
 
       clearCanvas();
       drawGrid();
@@ -93,11 +92,7 @@ const Canvas = () => {
     };
 
     drawGraph();
-  }, [R]);
-
-  const handleSlide = (event) => {
-    setR(Number(event.target.value));
-  };
+  }, [r]);
 
   return (
     <div>

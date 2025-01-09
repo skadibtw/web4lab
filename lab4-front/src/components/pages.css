@@ -28,15 +28,6 @@ html, body {
     width: 100%;
   }
 
-  .main-page {
-    margin-top: 10%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    min-height: 100vh;
-    overflow: hidden;
-  }
   
   .input-container {
     display: flex;
@@ -90,4 +81,25 @@ html, body {
   .form input {
     width: 100%;
   }
+}
+.layout {
+  display: flex;
+  gap: 20px;
+  margin-left: 10%;
+  margin-top: 10%;
+  width: 100%;
+}
+
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.right-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
