@@ -9,6 +9,7 @@ import jakarta.ws.rs.ext.Provider;
 import java.io.IOException;
 
 @Provider
+@PreMatching
 public class CORSFilter implements ContainerResponseFilter {
 
     @Override
