@@ -28,7 +28,12 @@ const MainPage = () => {
   const fetchPoints = async (p, size) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points?page=${p}&size=${size}`
+        `http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points?page=${p}&size=${size}`,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
       );
       if (response.ok) {
         const data = await response.json();

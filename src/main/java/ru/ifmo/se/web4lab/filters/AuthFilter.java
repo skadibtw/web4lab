@@ -33,7 +33,7 @@ public class AuthFilter implements ContainerRequestFilter {
 
                     @Override
                     public boolean isUserInRole(String role) {
-                        return true; // Здесь можно добавить проверку ролей
+                        return true;
                     }
 
                     @Override
