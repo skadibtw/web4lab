@@ -29,7 +29,8 @@ const CustomInput = ({
       error={Boolean(error)}
       helperText={error}
       className="custom-input"
-      sx={{ color: "white" }}
+      sx={{ color: "#fff" }}
+      style={{ color: "#fff" }}
     />
   );
 };
