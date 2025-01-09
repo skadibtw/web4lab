@@ -7,6 +7,8 @@ import CustomInput from "./CustomInput.jsx";
 import CustomIconButton from "./CustomIconButton.jsx";
 import Canvas from "./Canvas.jsx";
 import ResultTable from "./ResultTable.jsx";
+import SendIcon from "@mui/icons-material/Send";
+import IconButton from "@mui/material/IconButton";
 
 const MainPage = () => {
   const [x, setX] = useState(0);
@@ -140,13 +142,13 @@ const MainPage = () => {
                 onClick={() => handleRChange(value)}
               />
             ))}
-            <CustomIconButton
-              key="submit-button" // Уникальный ключ
-              icon="keyboard-arrow-up"
-              color="default"
+            <IconButton
+              key="submit-button"
               onClick={handleSubmit}
               style={{ marginLeft: "10px" }}
-            />
+            >
+              <SendIcon style={{ color: "#fff" }} />
+            </IconButton>
           </div>
         </div>
       </div>

@@ -2,6 +2,8 @@ package ru.ifmo.se.web4lab.configs;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
+import ru.ifmo.se.web4lab.controllers.PointController;
+import ru.ifmo.se.web4lab.controllers.UserController;
 import ru.ifmo.se.web4lab.filters.CORSFilter;
 import ru.ifmo.se.web4lab.filters.AuthFilter;
 
@@ -16,6 +18,8 @@ public class ApplicationConfig extends Application {
         Set<Class<?>> resources = new HashSet<>();
         resources.add(CORSFilter.class);
         resources.add(AuthFilter.class);
+        resources.add(UserController.class);
+        resources.add(PointController.class);
         return resources;
     }
 }
