@@ -51,7 +51,6 @@ public class UserController {
             userDAO.createUser(user);
     
             // Возвращение успешного ответа
-            System.out.println("Bearer " + token);
             return Response.status(Response.Status.CREATED)
             .header("Authorization", "Bearer " + token)
             .build();

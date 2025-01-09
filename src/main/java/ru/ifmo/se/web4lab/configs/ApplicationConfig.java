@@ -16,7 +16,6 @@ public class ApplicationConfig extends Application {
         Set<Class<?>> resources = new HashSet<>();
         resources.add(CORSFilter.class);
         resources.add(AuthFilter.class);
-        // добавьте другие ресурсы
         return resources;
     }
 }
