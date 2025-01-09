@@ -130,6 +130,7 @@ const MainPage = () => {
               onChange={handleYChange}
               error={error} // Передаём текст ошибки
               label="Введите Y"
+              style={{ color: "#fff" }}
             />
           </div>
           <div className="input-group">
