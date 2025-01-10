@@ -1,59 +1,67 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './pages.css'
-import Cookies from 'js-cookie';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./pages.css";
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     if (username && password) {
-      const response = await fetch('http://localhost:8080/web4lab-1.0-SNAPSHOT/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: username,
-          hashed_password: password
-        })
-      }); 
-      if (response.status === 200) {
-        const token = response.headers.get('Authorization').split(' ')[1]; // Получаем токен из заголовка
-        if (token) {
-          Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'Strict' });
+      const response = await fetch(
+        "http://localhost:8080/web4lab-1.0-SNAPSHOT/api/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            hashed_password: password,
+          }),
         }
-        console.log('User logged in successfully');
-        toast.success('Пользователь вошел в систему');
-        navigate('/main');
+      );
+      if (response.status === 200) {
+        const token = response.headers.get("Authorization").split(" ")[1]; // Получаем токен из заголовка
+        if (token) {
+          Cookies.set("token", token, {
+            expires: 7,
+            secure: true,
+            sameSite: "Strict",
+          });
+        }
+        console.log("User logged in successfully");
+        toast.success("Пользователь вошел в систему");
+        navigate("/main");
       } else {
-        console.log('Error logging in');
-        toast.error('Ошибка входа');
-      }     
+        console.log("Error logging in");
+        toast.error("Ошибка входа");
+      }
     } else {
-      alert('Введите логин и пароль');
+      alert("Введите логин и пароль");
     }
   };
 
   const handleRegister = () => {
-    navigate('/register');
-  }
-  
+    navigate("/register");
+  };
+
   return (
-    
     <div className="login-page">
       <ToastContainer />
       <h2>Вход</h2>
-      
+
       <div className="form">
         <input
           type="text"
           placeholder="Логин"
           value={username}
+          error={error}
           onChange={(e) => setUsername(e.target.value)}
         />
         <input

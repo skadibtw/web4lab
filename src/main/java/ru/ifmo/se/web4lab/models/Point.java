@@ -103,15 +103,19 @@ public class Point implements Serializable {
     }
 
     public void calc() {
-        long now = System.nanoTime();
+        long now = System.currentTimeMillis();
 
 
         insideArea = (((x <= 0 && x >= (-r)) && (y >= 0 && y <= r) && (y <= x + r)) ||
                 (x >= 0 && y >= 0 && x <= r && y <= r/2) ||
-                (x >= 0 && y <= 0 && (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r / 2, 2)))) && (x >= -3 && x <= 5 && y >= -3 && y <= 5 && r >= 0 && r <= 5);
+                (x >= 0 && y <= 0 && (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r / 2, 2))));
 
         timestamp = new Date(System.currentTimeMillis());
-        executionTime = System.nanoTime() - now;
+
+        executionTime = System.currentTimeMillis() - now;
+        if (executionTime < 0) {
+            executionTime = 1;
+        }
     }
 
     public void setUser(User user) {

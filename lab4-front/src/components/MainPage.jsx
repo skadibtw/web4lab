@@ -59,7 +59,6 @@ const MainPage = () => {
   const handleSubmit = async () => {
     if (y && r) {
       const token = Cookies.get("token");
-      console.log("token: ", token);
       try {
         const response = await fetch(
           "http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points/create",
@@ -73,7 +72,10 @@ const MainPage = () => {
           }
         );
         if (response.ok) {
+          const data = await response.json();
           toast.success("Точка успешно отправлена");
+          setTotalItems(totalItems + 1);
+          setRows([...rows, data]);
         } else if (response.status === 401) {
           toast.error("Необходимо авторизоваться для отправки точки");
         } else {
@@ -81,6 +83,7 @@ const MainPage = () => {
         }
       } catch (e) {
         toast.error("Сетевая ошибка");
+        console.error(e);
       }
     } else {
       toast.error("Заполните все поля");
@@ -108,11 +111,16 @@ const MainPage = () => {
     }
   };
 
+  const handleCanvasPointAdd = (pointData) => {
+    setRows([...rows, pointData]);
+    setTotalItems(totalItems + 1);
+  };
+
   return (
     <div className="layout">
       <div className="left-column">
         <ToastContainer />
-        <Canvas r={r} />
+        <Canvas r={r} rows={rows} onPointAdd={handleCanvasPointAdd} />
         <div className="input-container">
           <div className="input-group">
             <span>X:</span>

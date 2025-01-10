@@ -51,8 +51,6 @@ public class PointController {
         Optional<User> currentUser = userDAO.findByUsername(currentUsername);
         if (currentUser.isPresent()) {
             User user = currentUser.get();
-            System.out.println(currentUsername);
-
             List<Point> points = pointDAO.findPointsByUser(user);
             if (points.isEmpty()) {
                 return Response.ok(new PaginatedResponse(

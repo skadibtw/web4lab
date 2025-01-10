@@ -1,13 +1,17 @@
 import React, { useRef, useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
-const Canvas = ({ r }) => {
+const Canvas = ({ r, rows = [], onPointAdd }) => {
   const canvasRef = useRef(null);
+  const [points, setPoints] = useState([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     const Xcanvas = canvas.width;
     const Ycanvas = canvas.height;
+    const scale = (Xcanvas / 2) * (r / 5);
 
     const clearCanvas = () => {
       ctx.clearRect(0, 0, Xcanvas, Ycanvas);
@@ -39,7 +43,6 @@ const Canvas = ({ r }) => {
     };
 
     const drawShapes = () => {
-      const scale = (Xcanvas / 2) * (r / 5);
       ctx.fillStyle = "#5f9ea0";
 
       // Четверть круга
@@ -81,6 +84,24 @@ const Canvas = ({ r }) => {
       ctx.fillText("-R", Xcanvas / 2 - 20, Ycanvas / 2 + scale);
     };
 
+    const drawPoints = () => {
+      rows.forEach((pt) => {
+        ctx.beginPath();
+        const xC = pt.xCoord !== undefined ? pt.xCoord : pt.x;
+        const yC = pt.yCoord !== undefined ? pt.yCoord : pt.y;
+        const inside = pt.inside !== undefined ? pt.inside : pt.insideArea;
+        ctx.arc(
+          Xcanvas / 2 + (xC * scale) / r,
+          Ycanvas / 2 - (yC * scale) / r,
+          5,
+          0,
+          2 * Math.PI
+        );
+        ctx.fillStyle = inside ? "green" : "red";
+        ctx.fill();
+      });
+    };
+
     const drawGraph = () => {
       if (r === null) return;
 
@@ -89,10 +110,69 @@ const Canvas = ({ r }) => {
       drawAxes();
       drawShapes();
       drawLabels();
+      drawPoints();
     };
 
     drawGraph();
-  }, [r]);
+    canvas.addEventListener("click", handleCanvasClick);
+    return () => {
+      canvas.removeEventListener("click", handleCanvasClick);
+    };
+  }, [r, rows]);
+
+  const handleCanvasClick = async (e) => {
+    if (!r) {
+      toast.error("Укажите R перед отправкой точки");
+      return;
+    }
+    const rect = e.target.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Преобразуем пиксельные координаты в значения X и Y
+    const { xCoord, yCoord } = transformCoordinates(mouseX, mouseY);
+
+    try {
+      const token = Cookies.get("token");
+      const response = await fetch(
+        "http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({ x: xCoord, y: yCoord, r }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        onPointAdd && onPointAdd(data);
+        toast.success("Точка добавлена");
+      } else if (response.status === 401) {
+        toast.error("Необходимо авторизоваться");
+      } else {
+        toast.error("Ошибка отправки");
+      }
+    } catch {
+      toast.error("Сетевая ошибка");
+    }
+  };
+
+  const transformCoordinates = (mouseX, mouseY) => {
+    const Xcanvas = canvasRef.current.width;
+    const Ycanvas = canvasRef.current.height;
+    const centerX = Xcanvas / 2;
+    const centerY = Ycanvas / 2;
+    const scale = (Xcanvas / 2) * (r / 5);
+
+    const offsetX = mouseX - centerX;
+    const offsetY = centerY - mouseY;
+    const xCoord = (offsetX * r) / scale;
+    const yCoord = (offsetY * r) / scale;
+
+    return { xCoord, yCoord };
+  };
 
   return (
     <div>

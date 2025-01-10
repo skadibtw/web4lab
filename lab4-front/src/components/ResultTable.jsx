@@ -43,9 +43,15 @@ const ResultTable = ({
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                {columns.map((column) => (
-                  <TableCell key={column.id}>{row[column.id]}</TableCell>
-                ))}
+                {columns.map((column) => {
+                  let value = row[column.id];
+                  if (column.id === "timestamp") {
+                    value = new Date(value).toLocaleString();
+                  } else if (column.id === "insideArea") {
+                    value = value ? "✅" : "❌";
+                  }
+                  return <TableCell key={column.id}>{value}</TableCell>;
+                })}
               </TableRow>
             ))}
           </TableBody>
