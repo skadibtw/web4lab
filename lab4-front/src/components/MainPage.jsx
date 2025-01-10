@@ -22,7 +22,7 @@ const MainPage = () => {
     { id: "r", label: "R" },
     { id: "insideArea", label: "Inside Area" },
     { id: "timestamp", label: "Timestamp" },
-    { id: "executionTime", label: "Execution time(ns)" },
+    { id: "executionTime", label: "Execution time(ms)" },
   ]);
   const [page, setPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
@@ -95,11 +95,24 @@ const MainPage = () => {
   };
 
   const handleYChange = (value) => {
-    if (value >= -3 && value <= 5) {
-      setY(value);
+    if (value === "") {
+      setY("");
       setError("");
+      return;
+    }
+    const regex = /^-?\d*\.?\d*$/;
+    if (regex.test(value)) {
+      if (value.length <= 12) {
+        const numValue = parseFloat(value);
+        if (!isNaN(numValue) && numValue >= -3 && numValue <= 5) {
+          setY(value);
+          setError("");
+        } else {
+          setError("Y должен быть в диапазоне от -3 до 5");
+        }
+      }
     } else {
-      setError("Y должен быть в диапазоне от -3 до 5");
+      setError("Некорректный ввод");
     }
   };
 
@@ -127,7 +140,7 @@ const MainPage = () => {
             {[-3, -2, -1, 0, 1, 2, 3, 4, 5].map((value) => (
               <CustomIconButton
                 key={`${value}`}
-                icon={value.toString()} // Преобразуем в строку
+                icon={value.toString()}
                 color={x === value ? "primary" : "default"}
                 onClick={() => handleXChange(value)}
               />
@@ -138,10 +151,9 @@ const MainPage = () => {
             <CustomInput
               type="number"
               value={y}
-              onChange={handleYChange}
-              error={error} // Передаём текст ошибки
+              onChange={(e) => handleYChange(e.target.value)}
+              error={error}
               label="Введите Y"
-              style={{ color: "#fff" }}
             />
           </div>
           <div className="input-group">
@@ -154,10 +166,13 @@ const MainPage = () => {
                 onClick={() => handleRChange(value)}
               />
             ))}
+          </div>
+          <div className="submit-button-container">
             <IconButton
               key="submit-button"
               onClick={handleSubmit}
               style={{ marginLeft: "10px" }}
+              className="submit-button"
             >
               <SendIcon style={{ color: "#fff" }} />
             </IconButton>

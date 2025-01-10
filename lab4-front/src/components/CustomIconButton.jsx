@@ -1,17 +1,25 @@
 import React from "react";
 import IconButton from "@mui/material/IconButton";
-import Icon from "@mui/material/Icon";
+import PropTypes from "prop-types";
 
-const CustomIconButton = ({ icon, color, onClick, style }) => {
+const CustomIconButton = ({ icon, color, onClick }) => {
   return (
-    <IconButton
-      color={color === "primary" ? "primary" : "default"}
-      onClick={onClick}
-      style={style}
-    >
-      <Icon>{icon}</Icon>
+    <IconButton onClick={onClick} color={color}>
+      <span
+        style={{
+          color: color === "primary" ? "#1976d2" : "#fff",
+        }}
+      >
+        {icon}
+      </span>
     </IconButton>
   );
+};
+
+CustomIconButton.propTypes = {
+  icon: PropTypes.string.isRequired,
+  color: PropTypes.oneOf(["primary", "default"]),
+  onClick: PropTypes.func.isRequired,
 };
 
 export default CustomIconButton;

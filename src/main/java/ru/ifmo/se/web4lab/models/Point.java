@@ -3,7 +3,7 @@ package ru.ifmo.se.web4lab.models;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "point")
@@ -26,10 +26,10 @@ public class Point implements Serializable {
     private long executionTime;
     @Column(name = "created_by", nullable = false)
     private String createdBy; // Токен пользователя, создавшего точку
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
-
 
     public Point() {
     }
@@ -95,9 +95,11 @@ public class Point implements Serializable {
     public void setExecutionTime(long executionTime) {
         this.executionTime = executionTime;
     }
+
     public String getCreatedBy() {
         return createdBy;
     }
+
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
@@ -105,15 +107,14 @@ public class Point implements Serializable {
     public void calc() {
         long now = System.currentTimeMillis();
 
-
         insideArea = (((x <= 0 && x >= (-r)) && (y >= 0 && y <= r) && (y <= x + r)) ||
-                (x >= 0 && y >= 0 && x <= r && y <= r/2) ||
+                (x >= 0 && y >= 0 && x <= r && y <= r / 2) ||
                 (x >= 0 && y <= 0 && (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r / 2, 2))));
 
         timestamp = new Date(System.currentTimeMillis());
 
         executionTime = System.currentTimeMillis() - now;
-        if (executionTime < 0) {
+        if (executionTime <= 0) {
             executionTime = 1;
         }
     }
@@ -121,6 +122,7 @@ public class Point implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
     public User getUser() {
         return user;
     }

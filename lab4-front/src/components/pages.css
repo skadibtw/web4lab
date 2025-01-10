@@ -54,6 +54,11 @@ html, body {
   overflow: hidden;
 }
 
+.submit-button-container {
+  display: flex;
+  justify-content: flex-end; /* По умолчанию снизу справа */
+}
+
 .layout {
   display: flex;
   gap: 20px;
@@ -90,6 +95,11 @@ html, body {
     margin-right: auto;
     padding: 0;
   }
+  .submit-button-container {
+    align-self: center;
+    margin-left: 20px; 
+  }
+  
 }
 
 /* Планшетный режим */
@@ -102,6 +112,10 @@ html, body {
     margin-left: auto;
     margin-right: auto;
     padding: 0 1em;
+  }
+  .submit-button-container {
+    justify-content: flex-end;
+    margin-top: 10px; 
   }
 }
 
@@ -121,4 +135,9 @@ html, body {
   .form input {
     width: 100%;
   }
+  .submit-button-container {
+    justify-content: center; 
+    margin-top: 10px; 
+  }
+
 }
