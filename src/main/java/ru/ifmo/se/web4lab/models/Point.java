@@ -26,6 +26,9 @@ public class Point implements Serializable {
     private long executionTime;
     @Column(name = "created_by", nullable = false)
     private String createdBy; // Токен пользователя, создавшего точку
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 
 
     public Point() {
@@ -103,11 +106,18 @@ public class Point implements Serializable {
         long now = System.nanoTime();
 
 
-        insideArea = (((x <= 0 && x >= (-r)) && (y >= 0 && y <= r / 2) && (y <= 0.5*x + r/2)) ||
-                (x >= 0 && y <= 0 && x <= r/2 && y >= (-r)) ||
-                (x <= 0 && y <= 0 && (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r / 2, 2)))) && (x >= -4 && x <= 4 && y >= -5 && y <= 5 && r >= 1 && r <= 4);
+        insideArea = (((x <= 0 && x >= (-r)) && (y >= 0 && y <= r) && (y <= x + r)) ||
+                (x >= 0 && y >= 0 && x <= r && y <= r/2) ||
+                (x >= 0 && y <= 0 && (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r / 2, 2)))) && (x >= -3 && x <= 5 && y >= -3 && y <= 5 && r >= 0 && r <= 5);
 
         timestamp = new Date(System.currentTimeMillis());
         executionTime = System.nanoTime() - now;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
     }
 }

@@ -1,10 +1,9 @@
 package ru.ifmo.se.web4lab.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -14,6 +13,8 @@ public class User {
     private int id;
     private String username;
     private String hashed_password;
+    @OneToMany
+    private List<Point> points;
 
     public User() {
     }

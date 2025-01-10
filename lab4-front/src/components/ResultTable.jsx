@@ -10,10 +10,15 @@ import {
   Paper,
 } from "@mui/material";
 
-const ResultTable = ({ rows, columns }) => {
-  const [page, setPage] = useState(0);
+const ResultTable = ({
+  rows = [],
+  columns,
+  page,
+  totalItems,
+  onChangePage,
+}) => {
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    onChangePage(event, newPage);
   };
 
   return (
@@ -36,7 +41,7 @@ const ResultTable = ({ rows, columns }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * 15, page * 15 + 15).map((row) => (
+            {rows.map((row) => (
               <TableRow key={row.id}>
                 {columns.map((column) => (
                   <TableCell key={column.id}>{row[column.id]}</TableCell>
@@ -52,7 +57,7 @@ const ResultTable = ({ rows, columns }) => {
         }}
         rowsPerPageOptions={[]}
         component="div"
-        count={rows.length}
+        count={totalItems}
         rowsPerPage={15}
         page={page}
         onPageChange={handleChangePage}

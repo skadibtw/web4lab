@@ -15,8 +15,11 @@ public class PointDAO {
 
     public void savePoint(Point point, String createdBy) {
         point.setCreatedBy(createdBy);
+        User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                .setParameter("username", createdBy)
+                .getSingleResult();
+        point.setUser(user);
         em.persist(point);
-
     }
 
     public List<Point> findPointsByUser(User user) {
@@ -25,3 +28,4 @@ public class PointDAO {
                 .getResultList();
     }
 }
+

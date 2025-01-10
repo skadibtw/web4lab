@@ -20,17 +20,18 @@ const MainPage = () => {
     { id: "x", label: "X" },
     { id: "y", label: "Y" },
     { id: "r", label: "R" },
-    { id: "result", label: "Result" },
-    { id: "time", label: "Time" },
-    { id: "executionTime", label: "Execution time" },
+    { id: "insideArea", label: "Inside Area" },
+    { id: "timestamp", label: "Timestamp" },
+    { id: "executionTime", label: "Execution time(ns)" },
   ]);
   const [page, setPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
 
-  const fetchPoints = async (p, size) => {
+  const fetchPoints = async (p) => {
     try {
+      const token = Cookies.get("token");
       const response = await fetch(
-        `http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points?page=${p}&size=${size}`,
+        `http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points?page=${p}&size=${15}`,
         {
           headers: {
             Authorization: `${token}`,
@@ -39,8 +40,8 @@ const MainPage = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setRows(data.items); // массив точек
-        setTotalItems(data.total); // общее кол-во элементов
+        setRows(data.content); // массив точек
+        setTotalItems(data.totalElements); // общее кол-во элементов
       }
     } catch (e) {
       console.error("Ошибка при загрузке: ", e);
@@ -51,7 +52,9 @@ const MainPage = () => {
     fetchPoints(page);
   }, [page]);
 
-  const handleChangePage = (_, newPage) => setPage(newPage);
+  const handleChangePage = (_, newPage) => {
+    setPage(newPage);
+  };
 
   const handleSubmit = async () => {
     if (y && r) {
