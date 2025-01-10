@@ -33,7 +33,6 @@ function RegisterPage() {
 
     if (response.status === 201) {
       console.log("User registered successfully");
-      console.log("response: ", response);
       const token = response.headers.get("Authorization");
       Cookies.set("token", token, {
         expires: 7,
