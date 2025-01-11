@@ -1,3 +1,4 @@
+/* Общие стили для всех устройств */
 .header {
   position: fixed;
   top: 0;
@@ -26,7 +27,7 @@
   background-color: #ff4d4d;
   color: white;
   border: none;
-  padding: 0px 16px;
+  padding: 8px 16px;
   cursor: pointer;
   font-size: 14px;
   border-radius: 4px;
@@ -37,3 +38,74 @@
   background-color: #e60000;
 }
 
+@media (max-width: 644px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .header-info p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+
+  .logout-button {
+    padding: 6px 12px;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 645px) and (max-width: 1051px) {
+  .header {
+    padding: 10px 40px;
+  }
+
+  .header-content {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 4%;
+  }
+
+  .header-info p {
+    margin: 0 20px;
+    font-size: 16px;
+  }
+
+  .logout-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1052px) {
+  .header {
+    padding: 15px 60px;
+  }
+
+  .header-content {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 6%;
+  }
+
+  .header-info p {
+    margin: 0 25px;
+    font-size: 18px;
+  }
+
+  .logout-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 0;
+  }
+}
