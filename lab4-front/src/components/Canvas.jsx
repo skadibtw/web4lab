@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 
 const Canvas = ({ r, rows = [], onPointAdd }) => {
   const canvasRef = useRef(null);
-  const [points, setPoints] = useState([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -132,31 +131,10 @@ const Canvas = ({ r, rows = [], onPointAdd }) => {
     // Преобразуем пиксельные координаты в значения X и Y
     const { xCoord, yCoord } = transformCoordinates(mouseX, mouseY);
 
-    try {
-      const token = Cookies.get("token");
-      const response = await fetch(
-        "http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-          body: JSON.stringify({ x: xCoord, y: yCoord, r }),
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        onPointAdd && onPointAdd(data);
-        toast.success("Точка добавлена");
-      } else if (response.status === 401) {
-        toast.error("Необходимо авторизоваться");
-      } else {
-        toast.error("Ошибка отправки");
-      }
-    } catch {
-      toast.error("Сетевая ошибка");
-    }
+    const pointData = { x: xCoord, y: yCoord, r };
+
+    // Передаем данные точки обратно в MainPage
+    onPointAdd && onPointAdd(pointData);
   };
 
   const transformCoordinates = (mouseX, mouseY) => {

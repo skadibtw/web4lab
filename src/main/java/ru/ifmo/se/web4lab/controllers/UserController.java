@@ -83,7 +83,6 @@ public class UserController {
         if (optionalUser.isPresent() && checkPassword(password, optionalUser.get().getHashed_password())) {
             // Генерация JWT токена
             String token = TokenUtil.generateToken(username);
-            System.out.println("Bearer " + token);
             return Response.ok()
                     .header("Authorization", "Bearer " + token)  // Отправляем токен в заголовке
                     .build();

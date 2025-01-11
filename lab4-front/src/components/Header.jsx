@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../userSlice";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { IconButton } from "@mui/material";
 
 function Header() {
   const navigate = useNavigate();
-  const token = Cookies.get("token");
-  const isLoggedIn = Boolean(token);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
 
   const onLogout = () => {
-    Cookies.remove("token");
+    dispatch(logout());
     navigate("/");
   };
 

@@ -1,54 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./pages.css";
-import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, setUsername } from "../userSlice";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const usernameRedux = useSelector((state) => state.user.username);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const loginError = useSelector((state) => state.user.error);
 
-  const handleLogin = async () => {
-    if (username && password) {
-      const response = await fetch(
-        "http://localhost:8080/web4lab-1.0-SNAPSHOT/api/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: username,
-            hashed_password: password,
-          }),
-        }
-      );
-      if (response.status === 200) {
-        const token = response.headers.get("Authorization").split(" ")[1]; // Получаем токен из заголовка
-        if (token) {
-          Cookies.set("token", token, {
-            expires: 7,
-            secure: true,
-            sameSite: "Strict",
-          });
-        }
-        console.log("User logged in successfully");
-        toast.success("Пользователь вошел в систему");
-        navigate("/main");
-      } else {
-        console.log("Error logging in");
-        toast.error("Ошибка входа");
-      }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/main");
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleLogin = () => {
+    if (usernameRedux && password) {
+      dispatch(loginUser({ username: usernameRedux, password }));
     } else {
-      alert("Введите логин и пароль");
+      toast.error("Введите логин и пароль");
     }
   };
 
   const handleRegister = () => {
     navigate("/register");
+  };
+
+  const handleUsernameChange = (e) => {
+    dispatch(setUsername(e.target.value));
   };
 
   return (
@@ -60,9 +45,8 @@ const LoginPage = () => {
         <input
           type="text"
           placeholder="Логин"
-          value={username}
-          error={error}
-          onChange={(e) => setUsername(e.target.value)}
+          value={usernameRedux}
+          onChange={handleUsernameChange}
         />
         <input
           type="password"

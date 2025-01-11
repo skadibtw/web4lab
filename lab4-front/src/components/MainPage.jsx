@@ -9,13 +9,21 @@ import Canvas from "./Canvas.jsx";
 import ResultTable from "./ResultTable.jsx";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPoints, createPoint, setPage } from "../pointsSlice";
 
 const MainPage = () => {
   const [x, setX] = useState(0);
   const [y, setY] = useState("");
   const [r, setR] = useState(3);
   const [error, setError] = useState("");
-  const [rows, setRows] = useState([]);
+  const dispatch = useDispatch();
+  const {
+    rows,
+    totalElements,
+    page,
+    error: pointsError,
+  } = useSelector((state) => state.points);
   const [columns] = useState([
     { id: "x", label: "X" },
     { id: "y", label: "Y" },
@@ -24,67 +32,20 @@ const MainPage = () => {
     { id: "timestamp", label: "Timestamp" },
     { id: "executionTime", label: "Execution time(ms)" },
   ]);
-  const [page, setPage] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
-
-  const fetchPoints = async (p) => {
-    try {
-      const token = Cookies.get("token");
-      const response = await fetch(
-        `http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points?page=${p}&size=${15}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setRows(data.content); // массив точек
-        setTotalItems(data.totalElements); // общее кол-во элементов
-      }
-    } catch (e) {
-      console.error("Ошибка при загрузке: ", e);
-    }
-  };
 
   useEffect(() => {
-    fetchPoints(page);
+    dispatch(fetchPoints(page));
   }, [page]);
 
   const handleChangePage = (_, newPage) => {
-    setPage(newPage);
+    dispatch(setPage(newPage));
   };
 
   const handleSubmit = async () => {
     if (y && r) {
-      const token = Cookies.get("token");
-      try {
-        const response = await fetch(
-          "http://localhost:8080/web4lab-1.0-SNAPSHOT/api/points/create",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `${token}`,
-            },
-            body: JSON.stringify({ x, y, r }),
-          }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          toast.success("Точка успешно отправлена");
-          setTotalItems(totalItems + 1);
-          setRows([...rows, data]);
-        } else if (response.status === 401) {
-          toast.error("Необходимо авторизоваться для отправки точки");
-        } else {
-          toast.error("Ошибка при отправке точки");
-        }
-      } catch (e) {
-        toast.error("Сетевая ошибка");
-        console.error(e);
-      }
+      dispatch(createPoint({ x, y: parseFloat(y), r }))
+        .unwrap()
+        .catch((error) => toast.error(error));
     } else {
       toast.error("Заполните все поля");
     }
@@ -125,8 +86,9 @@ const MainPage = () => {
   };
 
   const handleCanvasPointAdd = (pointData) => {
-    setRows([...rows, pointData]);
-    setTotalItems(totalItems + 1);
+    dispatch(createPoint(pointData))
+      .unwrap()
+      .catch((error) => toast.error(error));
   };
 
   return (
@@ -184,7 +146,7 @@ const MainPage = () => {
           rows={rows}
           columns={columns}
           page={page}
-          totalItems={totalItems}
+          totalItems={totalElements}
           onChangePage={handleChangePage}
         />
       </div>
